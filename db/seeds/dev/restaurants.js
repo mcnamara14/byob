@@ -17,21 +17,21 @@ const createRestaurant = (knex, restaurant) => {
     saturday: restaurant.saturday,
     sunday: restaurant.sunday
   }, 'id')
-  .then(restaurantId => {
-    let drinksPromises = [];
+    .then(restaurantId => {
+      let drinksPromises = [];
 
-    restaurant.drinks.forEach(drink => {
-      drinksPromises.push(
-        createDrinks(knex, {
-          description: drink.description,
-          best_deal: drink.best_deal,
-          restaurant_id: restaurantId[0]
-        })
-      )
+      restaurant.drinks.forEach(drink => {
+        drinksPromises.push(
+          createDrinks(knex, {
+            description: drink.description,
+            best_deal: drink.best_deal,
+            restaurant_id: restaurantId[0]
+          })
+        );
+      });
+
+      return Promise.all(drinksPromises);
     });
-
-    return Promise.all(drinksPromises);
-  })
 };
 
 const createDrinks = (knex, drink) => {
