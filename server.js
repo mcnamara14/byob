@@ -200,6 +200,22 @@ app.delete('/api/v1/drinks/:id/', (request, response) => {
     });
 });
 
+// Modify a restaurant
+
+app.patch('/api/v1/restaurants/:id', (request, response) => {
+  const newRestaurant = request.body;
+
+  database('restaurants').where("id", request.params.id)
+    .update(newRestaurant)
+    .then(restaurant => {
+      if(restaurant) {
+        response.status(201).json({status: `Restaurant ${request.params.id} was updated`});
+      } else {
+        response.status(422).json({error: "Restaurant found!"});
+      }
+    });
+});
+
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on ${app.get('port')}.`);
 });
