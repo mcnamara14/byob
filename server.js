@@ -77,6 +77,99 @@ app.get('/api/v1/restaurants/:restaurant_id/drinks', (request, response) => {
     });
 });
 
+// Add a drink special to a restaurant
+
+app.post('/api/v1/restaurants/:restaurant_id/drinks', (request, response) => {
+  const { restaurant_id } = request.params;
+  const { description, best_deal } = request.body;
+  const drink = { description, best_deal, restaurant_id };
+
+  for (let requiredParameter of ['description', 'best_deal']) {
+    if (!request.body[requiredParameter]) {
+      return response
+        .status(422)
+        .send({ error: "Expected description & best_deal to be passed into the body" });
+    }
+  }
+
+  database('drinks').insert(drink, 'restaurant_id')
+    .then(drink => {
+      response.status(201).json({ id: drink[0] })
+    })
+    .catch(error => {
+      response.status(500).json({ error: `No restaurants with an id of ${restaurant_id}.` });
+    });
+}); 
+
+// Add a drink special to a restaurant
+
+app.post('/api/v1/restaurants/', (request, response) => {
+  const { 
+    name, 
+    address, 
+    zip, 
+    city, 
+    state, 
+    phone, 
+    website, 
+    monday, 
+    tuesday, 
+    wednesday, 
+    thursday, 
+    friday, 
+    saturday, 
+    sunday } = request.body; 
+
+  const restaurant = { 
+      name, 
+      address, 
+      zip, 
+      city, 
+      state, 
+      phone, 
+      website, 
+      monday, 
+      tuesday, 
+      wednesday, 
+      thursday, 
+      friday, 
+      saturday, 
+      sunday 
+  }
+
+  for (let requiredParameter of [
+    'name', 
+    'address', 
+    'zip', 
+    'city', 
+    'state', 
+    'phone', 
+    'website', 
+    'monday', 
+    'tuesday', 
+    'wednesday', 
+    'thursday', 
+    'friday', 
+    'saturday', 
+    'sunday' 
+  ]) {
+    if(!request.body[requiredParameter]) {
+      return response
+        .status(422)
+        .send({ error: 'Body missing information for request'})
+    }
+  }
+
+  database('restaurants').insert(restaurant, 'id')
+    .then(restaurant => {
+      response.status(201).json({ id: restaurant[0] })
+    })
+    .catch(error => {
+      response.status(500).json({ error });
+    }); 
+}); 
+
+
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on ${app.get('port')}.`); 
 });
