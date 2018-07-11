@@ -43,7 +43,39 @@ app.get('/api/v1/drinks', (request, response) => {
 
 // Get info for a single restaurant
 
+app.get('/api/v1/restaurants/:id', (request, response) => {
+  database('restaurants').where('id', request.params.id).select()
+    .then(restaurants => {
+      if (restaurants.length) {
+        response.status(200).json(restaurants);
+      } else {
+        response.status(404).json({ 
+          error: `Could not find a restaurant with id ${request.params.id}`
+        });
+      }
+    })
+    .catch(error => {
+      response.status(404).json({ error });
+    });
+});
 
+// Get all drink specials for one restaurant
+
+app.get('/api/v1/restaurants/:restaurant_id/drinks', (request, response) => {
+  database('drinks').where('restaurant_id', request.params.restaurant_id).select()
+    .then(drinks => {
+      if (drinks.length) {
+        response.status(200).json(drinks);
+      } else {
+        response.status(404).json({ 
+          error: `Could not find any drinks special for a restaurant with id ${request.params.id}`
+        });
+      }
+    })
+    .catch(error => {
+      response.status(404).json({ error });
+    });
+});
 
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on ${app.get('port')}.`); 
