@@ -1,4 +1,4 @@
-module.exports = restaurantData = [
+module.exports = [
   {
     name: 'Ale House',
     address: '2501 16th St',
