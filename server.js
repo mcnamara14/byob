@@ -167,8 +167,25 @@ app.post('/api/v1/restaurants/', (request, response) => {
     .catch(error => {
       response.status(500).json({ error });
     }); 
-}); 
+});
 
+// Delete a restaurant
+
+app.delete('/api/v1/restaurants/:id', (request, response) => {
+  console.log('working')
+  console.log(request.params.id)
+  database('restaurants').where('id', request.params.id).del()
+    .then(restaurant => {
+      if(restaurant) {
+        response.sendStatus(204).json({ status: 'Restaurant deleted'})
+      } else {
+        response.status(404).json({ error: `Could not locate a restaurant with id ${request.params.id}`})
+      }
+    })
+    .catch(error => {
+      response.status(500).json({ error: 'Error!' });
+    });
+})
 
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on ${app.get('port')}.`); 
