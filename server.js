@@ -213,6 +213,23 @@ app.patch('/api/v1/restaurants/:id', (request, response) => {
       } else {
         response.status(422).json({error: "Restaurant found!"});
       }
+    })
+    .catch(error => {
+      response.status(500).json({error});
+    });
+});
+
+app.patch('/api/v1/drinks/:id', (request, response) => {
+  const newDrink = request.body;
+
+  database('drinks').where("id", request.params.id)
+    .update(newDrink)
+    .then(drink => {
+      if(drink) {
+        response.status(201).json({status: `Drink ${request.params.id} was updated`});
+      } else {
+        response.status(422).json({error: "Drink found!"});
+      }
     });
 });
 
