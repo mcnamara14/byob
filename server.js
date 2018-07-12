@@ -14,7 +14,31 @@ app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
-// Get all restaurants 
+let secretKey = 'WorldCup';
+
+app.set('secretKey', secretKey);
+
+
+const checkAuth = (request, response, next) => {
+
+  const token = request.body.token;
+
+  // if (!token) return response.status(401).send({auth: false, message: 'No token provided.'});
+
+  if (token) {
+    try {
+      let decoded = jwt.verify(token, app.get('secretKey'));
+    } catch (err) {
+      response.status(403).send('Invalid token');
+    }
+  } else {
+    response.status(403).send('You must send a token to be autorized to hit this endpoint.');
+  }
+
+  next();
+};
+
+// Get all restaurants
 
 app.get('/api/v1/restaurants', (request, response) => {
   database('restaurants').select()
@@ -237,15 +261,6 @@ app.patch('/api/v1/drinks/:id', (request, response) => {
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on ${app.get('port')}.`);
 });
-
-let secretKey = 'WorldCup';
-
-app.set('secretKey', secretKey);
-
-const checkAuth = (request, response, next) => {
-
-  next();
-};
 
 app.post('/api/v1/auth', (request, response) => {
   const {email, appName} = request.body;
