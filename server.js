@@ -228,16 +228,7 @@ app.delete('/api/v1/restaurants/:id', (request, response) => {
       }
     })
     .catch(error => {
-    <<<<<<<
-      HEAD;
-      response.status(500).json({error: 'Error!'});
-    ======
-      =
-        response.status(500).json({error});
-    >>>>>>>
-      Progress;
-      on;
-      delete test;
+      response.status(500).json({error});
     });
 });
 

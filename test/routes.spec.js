@@ -259,7 +259,7 @@ describe('API Routes', () => {
   describe('DELETE /api/v1/restaurants/:id', () => {
     it('should delete a restaurant', done => {
       chai.request(server)
-        .delete('/api/v1/restaurants/19')
+        .delete('/api/v1/restaurants/1')
         // .send({
         //   token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNhbUBnbWFpbC5jb20iLCJhcHBOYW1lIjoiQW5ncnkgQmlyZHMiLCJpYXQiOjE1MzE0MzUyMTUsImV4cCI6MTUzMTYwODAxNX0.ITmFfFCrENycfsVtDD7C0vgfhI4XwQTNiaNB4KybZqM",
         //   appName: "BYOB"
