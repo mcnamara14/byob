@@ -10,7 +10,7 @@ const database = require('knex')(configuration);
 app.set('port', process.env.PORT || 3000);
 app.locals.title = 'BYOB';
 
-app.use(express.static(__dirname + "/../public"));
+app.use(express.static(__dirname + '/../public'));
 app.set('secretKey', 'vonmiller');
 app.use(express.static('public'));
 app.use(bodyParser.json());
@@ -23,47 +23,46 @@ const checkAuth = (request, response, next) => {
 
   if (token) {
     try {
-      var decoded = jwt.verify(token, app.get('secretKey'))
-    } catch(err) {
-      response.status(403).send('Invalid token')
-    } 
+      var decoded = jwt.verify(token, app.get('secretKey'));
+    } catch (err) {
+      response.status(403).send('Invalid token');
+    }
   } else {
-    response.status(403).send('You must be authorized to hit this endpoint.')
+    response.status(403).send('You must be authorized to hit this endpoint.');
   }
 
-  next()
-}
+  next();
+};
 
 const checkAppName = (request, response, next) => {
   const appName = request.body.appName.toLowerCase();
   const application = app.locals.title.toLowerCase();
 
   if (!request.body.appName) {
-    response.status(422).send('You must send an appName with the request')
+    response.status(422).send('You must send an appName with the request');
   } else if (appName !== application) {
-    response.status(403).send('Invalid application')
+    response.status(403).send('Invalid application');
   }
-  
-  next()
-}
+
+  next();
+};
 
 app.post('/api/v1/authentication', (request, response) => {
-  const { email, appName } = request.body;
+  const {email, appName} = request.body;
 
   const token = jwt.sign({
-      email,
-      appName
-  }, app.get('secretKey'), { expiresIn: '48h'})
+    email,
+    appName
+  }, app.get('secretKey'), {expiresIn: '48h'});
 
   if (token) {
-    response.status(201).json({token})
+    response.status(201).json({token});
   } else {
-    response.status(500).json({error})
+    response.status(500).json({error});
   }
-})
+});
 
-
-// Get all restaurants 
+// Get all restaurants
 
 app.get('/api/v1/restaurants', (request, response) => {
   database('restaurants').select()
@@ -223,30 +222,35 @@ app.delete('/api/v1/restaurants/:id', (request, response) => {
   database('restaurants').where('id', request.params.id).del()
     .then(restaurant => {
       if (restaurant) {
-        response.status(204).json({status: "Restaurant deleted"});
+        response.status(204).json({status: 'Restaurant deleted'});
       } else {
         response.status(404).json({error: `Could not locate a restaurant with id ${request.params.id}`});
       }
     })
     .catch(error => {
-<<<<<<< HEAD
-      response.status(500).json({error: "Error!"});
-=======
-      response.status(500).json({error});
->>>>>>> Progress on delete test
+    <<<<<<<
+      HEAD;
+      response.status(500).json({error: 'Error!'});
+    ======
+      =
+        response.status(500).json({error});
+    >>>>>>>
+      Progress;
+      on;
+      delete test;
     });
 });
 
 // Delete a drink special from a restaurant
 
 app.delete('/api/v1/drinks/:id/', (request, response) => {
-  database('drinks').where("id", request.params.id)
+  database('drinks').where('id', request.params.id)
     .del()
     .then(drink => {
-      if(drink) {
-        response.status(204).json({status: "Drink deleted"});
+      if (drink) {
+        response.status(204).json({status: 'Drink deleted'});
       } else {
-        response.status(404).json({error: "Error drink not found!"});
+        response.status(404).json({error: 'Error drink not found!'});
       }
     })
     .catch(error => {
@@ -259,13 +263,13 @@ app.delete('/api/v1/drinks/:id/', (request, response) => {
 app.patch('/api/v1/restaurants/:id', (request, response) => {
   const newRestaurant = request.body;
 
-  database('restaurants').where("id", request.params.id)
+  database('restaurants').where('id', request.params.id)
     .update(newRestaurant)
     .then(restaurant => {
-      if(restaurant) {
+      if (restaurant) {
         response.status(201).json({status: `Restaurant ${request.params.id} was updated`});
       } else {
-        response.status(422).json({error: "Restaurant found!"});
+        response.status(422).json({error: 'Restaurant found!'});
       }
     })
     .catch(error => {
@@ -276,13 +280,13 @@ app.patch('/api/v1/restaurants/:id', (request, response) => {
 app.patch('/api/v1/drinks/:id', (request, response) => {
   const newDrink = request.body;
 
-  database('drinks').where("id", request.params.id)
+  database('drinks').where('id', request.params.id)
     .update(newDrink)
     .then(drink => {
-      if(drink) {
+      if (drink) {
         response.status(201).json({status: `Drink ${request.params.id} was updated`});
       } else {
-        response.status(422).json({error: "Drink found!"});
+        response.status(422).json({error: 'Drink found!'});
       }
     });
 });
