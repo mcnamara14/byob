@@ -1,6 +1,7 @@
 const bodyParser = require('body-parser');
 const express = require('express');
 const app = express();
+const jwt = require('jsonwebtoken');
 
 const environment = process.env.NODE_ENV || 'development';
 const configuration = require('./knexfile')[environment];
@@ -76,7 +77,7 @@ app.get('/api/v1/restaurants/:restaurant_id/drinks', (request, response) => {
 
 // Add a drink special to a restaurant
 
-app.post('/api/v1/restaurants/:restaurant_id/drinks', (request, response) => {
+app.post('/api/v1/restaurants/:restaurant_id/drinks', checkAuth, (request, response) => {
   const {restaurant_id} = request.params;
   const {description, best_deal} = request.body;
   const drink = {description, best_deal, restaurant_id};
@@ -173,26 +174,26 @@ app.delete('/api/v1/restaurants/:id', (request, response) => {
   database('restaurants').where('id', request.params.id).del()
     .then(restaurant => {
       if (restaurant) {
-        response.status(204).json({status: "Restaurant deleted"});
+        response.status(204).json({status: 'Restaurant deleted'});
       } else {
         response.status(404).json({error: `Could not locate a restaurant with id ${request.params.id}`});
       }
     })
     .catch(error => {
-      response.status(500).json({error: "Error!"});
+      response.status(500).json({error: 'Error!'});
     });
 });
 
 // Delete a drink special from a restaurant
 
 app.delete('/api/v1/drinks/:id/', (request, response) => {
-  database('drinks').where("id", request.params.id)
+  database('drinks').where('id', request.params.id)
     .del()
     .then(drink => {
-      if(drink) {
-        response.status(204).json({status: "Drink deleted"});
+      if (drink) {
+        response.status(204).json({status: 'Drink deleted'});
       } else {
-        response.status(404).json({error: "Error drink not found!"});
+        response.status(404).json({error: 'Error drink not found!'});
       }
     })
     .catch(error => {
@@ -205,13 +206,13 @@ app.delete('/api/v1/drinks/:id/', (request, response) => {
 app.patch('/api/v1/restaurants/:id', (request, response) => {
   const newRestaurant = request.body;
 
-  database('restaurants').where("id", request.params.id)
+  database('restaurants').where('id', request.params.id)
     .update(newRestaurant)
     .then(restaurant => {
-      if(restaurant) {
+      if (restaurant) {
         response.status(201).json({status: `Restaurant ${request.params.id} was updated`});
       } else {
-        response.status(422).json({error: "Restaurant found!"});
+        response.status(422).json({error: 'Restaurant found!'});
       }
     })
     .catch(error => {
@@ -222,19 +223,45 @@ app.patch('/api/v1/restaurants/:id', (request, response) => {
 app.patch('/api/v1/drinks/:id', (request, response) => {
   const newDrink = request.body;
 
-  database('drinks').where("id", request.params.id)
+  database('drinks').where('id', request.params.id)
     .update(newDrink)
     .then(drink => {
-      if(drink) {
+      if (drink) {
         response.status(201).json({status: `Drink ${request.params.id} was updated`});
       } else {
-        response.status(422).json({error: "Drink found!"});
+        response.status(422).json({error: 'Drink found!'});
       }
     });
 });
 
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on ${app.get('port')}.`);
+});
+
+let secretKey = 'WorldCup';
+
+app.set('secretKey', secretKey);
+
+const checkAuth = (request, response, next) => {
+
+  next();
+};
+
+app.post('/api/v1/auth', (request, response) => {
+  const {email, appName} = request.body;
+
+  const payload = {
+    email,
+    appName
+  };
+
+  const token = jwt.sign(payload, app.get('secretKey'), {expiresIn: '48h'});
+
+  if (token) {
+    response.status(201).send({auth: true, token: token});
+  } else {
+    response.status(500).json(error);
+  }
 });
 
 module.exports = app;
