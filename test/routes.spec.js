@@ -177,7 +177,7 @@ describe('API Routes', () => {
   });
 
   describe('GET /api/v1/restaurants/:id', () => {
-    it('should return aall drink specials for a single restaurant matching the id passed as a param', done => {
+    it('should return all drink specials for a single restaurant matching the id passed as a param', done => {
       chai.request(server)
         .get('/api/v1/restaurants/5/drinks')
         .end((err, response) => {
@@ -200,7 +200,25 @@ describe('API Routes', () => {
           response.body[1].should.have.property('restaurant_id');
           response.body[1].restaurant_id.should.equal(5);
         done();
+      })
+    })
+  });
+
+  describe('POST /api/v1/restaurants/:restaurant_id/drinks', () => {
+    it('should add a drink special to a restaurant', done => {
+      chai.request(server)
+        .post('/api/v1/restaurants/1/drinks')
+        .send({    
+          description: '$2 Vegas Bombs!',
+          best_deal: true
         })
+        .end((err, response) => {
+          response.should.have.status(201);
+          response.body.should.be.a('object');
+          response.body.should.have.property('id');
+          response.body.id.should.equal(35)
+        done();
+      })
     })
   });
 });
