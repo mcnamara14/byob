@@ -126,7 +126,7 @@ app.get('/api/v1/restaurants/:restaurant_id/drinks', (request, response) => {
 
 // Add a drink special to a restaurant
 
-app.post('/api/v1/restaurants/:restaurant_id/drinks', (request, response) => {
+app.post('/api/v1/restaurants/:restaurant_id/drinks', checkAuth, checkAppName, (request, response) => {
   const {restaurant_id} = request.params;
   const {description, best_deal} = request.body;
   const drink = {description, best_deal, restaurant_id};
@@ -229,7 +229,11 @@ app.delete('/api/v1/restaurants/:id', (request, response) => {
       }
     })
     .catch(error => {
+<<<<<<< HEAD
       response.status(500).json({error: "Error!"});
+=======
+      response.status(500).json({error});
+>>>>>>> Progress on delete test
     });
 });
 

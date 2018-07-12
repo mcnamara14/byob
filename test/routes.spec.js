@@ -199,27 +199,29 @@ describe('API Routes', () => {
           response.body[1].best_deal.should.equal(true);
           response.body[1].should.have.property('restaurant_id');
           response.body[1].restaurant_id.should.equal(5);
-        done();
-      })
-    })
+          done();
+        });
+    });
   });
 
   describe('POST /api/v1/restaurants/:restaurant_id/drinks', () => {
     it('should add a drink special to a restaurant', done => {
       chai.request(server)
         .post('/api/v1/restaurants/1/drinks')
-        .send({    
+        .send({
           description: '$2 Vegas Bombs!',
-          best_deal: true
+          best_deal: true,
+          token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNhbUBnbWFpbC5jb20iLCJhcHBOYW1lIjoiQW5ncnkgQmlyZHMiLCJpYXQiOjE1MzE0MzUyMTUsImV4cCI6MTUzMTYwODAxNX0.ITmFfFCrENycfsVtDD7C0vgfhI4XwQTNiaNB4KybZqM",
+          appName: "BYOB"
         })
         .end((err, response) => {
           response.should.have.status(201);
           response.body.should.be.a('object');
           response.body.should.have.property('id');
           response.body.id.should.equal(35);
-        done();
-      })
-    })
+          done();
+        });
+    });
   });
 
   describe('POST /api/v1/restaurants/', () => {
@@ -240,14 +242,35 @@ describe('API Routes', () => {
           thursday: '10pm - close',
           friday: '10pm - close',
           saturday: '10pm - close',
-          sunday: '10pm - close'
+          sunday: '10pm - close',
+          token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNhbUBnbWFpbC5jb20iLCJhcHBOYW1lIjoiQW5ncnkgQmlyZHMiLCJpYXQiOjE1MzE0MzUyMTUsImV4cCI6MTUzMTYwODAxNX0.ITmFfFCrENycfsVtDD7C0vgfhI4XwQTNiaNB4KybZqM",
+          appName: "BYOB"
         })
         .end((err, response) => {
           response.should.have.status(201);
           response.body.should.be.a('object');
           response.body.should.have.property('id');
           response.body.id.should.equal(21);
-        })
-    })
-  })
+          done();
+        });
+    });
+  });
+
+  describe('DELETE /api/v1/restaurants/:id', () => {
+    it('should delete a restaurant', done => {
+      chai.request(server)
+        .delete('/api/v1/restaurants/19')
+        // .send({
+        //   token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNhbUBnbWFpbC5jb20iLCJhcHBOYW1lIjoiQW5ncnkgQmlyZHMiLCJpYXQiOjE1MzE0MzUyMTUsImV4cCI6MTUzMTYwODAxNX0.ITmFfFCrENycfsVtDD7C0vgfhI4XwQTNiaNB4KybZqM",
+        //   appName: "BYOB"
+        // })
+        .end((err, response) => {
+          response.should.have.status(201);
+          response.body.should.be.a('object');
+          response.body.should.have.property('id');
+          response.body.id.should.equal(21);
+          done();
+        });
+    });
+  });
 });
