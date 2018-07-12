@@ -216,9 +216,38 @@ describe('API Routes', () => {
           response.should.have.status(201);
           response.body.should.be.a('object');
           response.body.should.have.property('id');
-          response.body.id.should.equal(35)
+          response.body.id.should.equal(35);
         done();
       })
     })
   });
+
+  describe('POST /api/v1/restaurants/', () => {
+    it('should add a restaurant', done => {
+      chai.request(server)
+        .post('/api/v1/restaurants/')
+        .send({
+          name: 'Star Bar',
+          address: '1235 20th St',
+          zip: 80202,
+          city: 'Denver',
+          state: 'CO',
+          phone: '(303) 743-3025',
+          website: 'http://starbarndenver.com',
+          monday: '10pm - close',
+          tuesday: '10pm - close',
+          wednesday: '10pm - close',
+          thursday: '10pm - close',
+          friday: '10pm - close',
+          saturday: '10pm - close',
+          sunday: '10pm - close'
+        })
+        .end((err, response) => {
+          response.should.have.status(201);
+          response.body.should.be.a('object');
+          response.body.should.have.property('id');
+          response.body.id.should.equal(21);
+        })
+    })
+  })
 });
