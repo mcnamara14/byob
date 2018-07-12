@@ -20,7 +20,7 @@
     "mocha": "^5.2.0"
   },
   "scripts": {
-    "test": "NODE_ENV=test mocha --exit",
+    "test": "NODE_ENV=development mocha --exit",
     "start": "node server.js",
     "lint": "eslint ./"
   },
