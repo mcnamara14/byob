@@ -89,7 +89,7 @@ app.post('/api/v1/restaurants/:restaurant_id/drinks', (request, response) => {
     }
   }
 
-  database('drinks').insert(drink, 'restaurant_id')
+  database('drinks').insert(drink, 'id')
     .then(drink => {
       response.status(201).json({id: drink[0]});
     })

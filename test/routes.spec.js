@@ -106,7 +106,6 @@ describe('API Routes', () => {
           response.body[0].should.have.property('friday');
           response.body[0].friday.should.equal('3pm - 6pm');
           response.body[0].should.have.property('saturday');
-          // response.body[0].saturday.to.be.null;
           (response.body[0].saturday === null).should.be.true;
           response.body[0].should.have.property('sunday');
           (response.body[0].sunday === null).should.be.true;
@@ -115,7 +114,7 @@ describe('API Routes', () => {
     });
   });
   describe('GET /api/v1/restaurants/4', () => {
-    it('should return the first restaurant', done => {
+    it('should return a single restaurant matching the id passed as a param', done => {
       chai.request(server)
         .get('/api/v1/restaurants/4')
         .end((err, response) => {
@@ -168,14 +167,87 @@ describe('API Routes', () => {
           response.body.should.be.a('array');
           response.body[0].should.have.property('id');
           response.body[0].should.have.property('description');
+          response.body[0].description.should.equal('$3 select Breckenridge & Wynkoop beers');
           response.body[0].should.have.property('best_deal');
+          response.body[0].best_deal.should.equal(true);
           response.body[0].should.have.property('restaurant_id');
           done();
         });
     });
   });
 
-  describe('POST /api/v1/drinks', () => {
-
+  describe('GET /api/v1/restaurants/:id', () => {
+    it('should return all drink specials for a single restaurant matching the id passed as a param', done => {
+      chai.request(server)
+        .get('/api/v1/restaurants/5/drinks')
+        .end((err, response) => {
+          response.should.have.status(200);
+          response.should.be.json;
+          response.body.should.be.a('array');
+          response.body.length.should.equal(2);
+          response.body[0].should.have.property('id');
+          response.body[0].should.have.property('description');
+          response.body[0].description.should.equal('$3 select beers');
+          response.body[0].should.have.property('best_deal');
+          response.body[0].best_deal.should.equal(false);
+          response.body[0].should.have.property('restaurant_id');
+          response.body[0].restaurant_id.should.equal(5);
+          response.body[1].should.have.property('id');
+          response.body[1].should.have.property('description');
+          response.body[1].description.should.equal('%50 bottles of wine');
+          response.body[1].should.have.property('best_deal');
+          response.body[1].best_deal.should.equal(true);
+          response.body[1].should.have.property('restaurant_id');
+          response.body[1].restaurant_id.should.equal(5);
+        done();
+      })
+    })
   });
+
+  describe('POST /api/v1/restaurants/:restaurant_id/drinks', () => {
+    it('should add a drink special to a restaurant', done => {
+      chai.request(server)
+        .post('/api/v1/restaurants/1/drinks')
+        .send({    
+          description: '$2 Vegas Bombs!',
+          best_deal: true
+        })
+        .end((err, response) => {
+          response.should.have.status(201);
+          response.body.should.be.a('object');
+          response.body.should.have.property('id');
+          response.body.id.should.equal(35);
+        done();
+      })
+    })
+  });
+
+  describe('POST /api/v1/restaurants/', () => {
+    it('should add a restaurant', done => {
+      chai.request(server)
+        .post('/api/v1/restaurants/')
+        .send({
+          name: 'Star Bar',
+          address: '1235 20th St',
+          zip: 80202,
+          city: 'Denver',
+          state: 'CO',
+          phone: '(303) 743-3025',
+          website: 'http://starbarndenver.com',
+          monday: '10pm - close',
+          tuesday: '10pm - close',
+          wednesday: '10pm - close',
+          thursday: '10pm - close',
+          friday: '10pm - close',
+          saturday: '10pm - close',
+          sunday: '10pm - close'
+        })
+        .end((err, response) => {
+          response.should.have.status(201);
+          response.body.should.be.a('object');
+          response.body.should.have.property('id');
+          response.body.id.should.equal(21);
+        })
+    })
+  })
 });

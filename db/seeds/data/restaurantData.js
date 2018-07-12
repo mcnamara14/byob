@@ -96,8 +96,8 @@ module.exports = [
     saturday: '3pm - 5pm',
     sunday: null,
     drinks: [
-      {description: '%50 bottles of wine', best_deal: true},
-      {description: '$3 select beers', best_deal: false}
+        {description: '$3 select beers', best_deal: false},
+      {description: '%50 bottles of wine', best_deal: true}
     ]
   },
   {
