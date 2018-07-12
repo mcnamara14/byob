@@ -1,0 +1,77 @@
+* {
+	font-family: "Source Sans Pro";
+}
+
+body {
+    background: url('/assets/home-bg.jpg');
+    background-size: cover;
+}
+
+h1 {
+    color: #fff;
+    text-align: center;
+}
+
+h2 {
+    color: #fff;
+    text-align: center;
+    font-size: 1.8rem;
+}
+
+.token-form {
+    width: 50%;
+    height: 400px;
+    margin: 80px auto 40px auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.logo {
+    color: #fff;
+    font-size: 4rem;
+    font-weight: 300;
+    margin: 0 auto;
+}
+
+input {
+    height: 55px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 2px;
+    font-size: 1rem;
+    background: #fff;
+    padding: 0 20px;
+    color: #555;
+}
+
+input::placeholder {
+    color: #ccc;
+    font-size: 1rem;
+}
+
+button {
+    height: 60px;
+    border: 1px solid #000;
+    font-size: 1.3rem;
+    color: #ffffff;
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+0,2d2d2d+100 */
+    background: #000000; /* Old browsers */
+    background: -moz-linear-gradient(top, #000000 0%, #2d2d2d 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, #000000 0%,#2d2d2d 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, #000000 0%,#2d2d2d 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#2d2d2d',GradientType=0 ); /* IE6-9 */
+}
+
+.token {
+    margin: 0 auto;
+    width: 60%;
+}
+
+span {
+    padding: 20px;
+    word-wrap: break-word;
+    background: #fff;
+    text-align: center;
+    display: block;
+}
