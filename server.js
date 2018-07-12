@@ -10,18 +10,20 @@ const database = require('knex')(configuration);
 app.set('port', process.env.PORT || 3000);
 app.locals.title = 'BYOB';
 
+app.use(express.static(__dirname + "/../public"));
 app.set('secretKey', 'vonmiller');
 app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 // Authentication
+
 const checkAuth = (request, response, next) => {
   const token = request.body.token;
 
   if (token) {
     try {
-      var decoded = jwt.verify(request.body.token, app.get('secretKey'))
+      var decoded = jwt.verify(token, app.get('secretKey'))
     } catch(err) {
       response.status(403).send('Invalid token')
     } 
@@ -54,12 +56,10 @@ app.post('/api/v1/authentication', (request, response) => {
   }, app.get('secretKey'), { expiresIn: '48h'})
 
   if (token) {
-    response.status(201).send(token)
+    response.status(201).json({token})
   } else {
-    response.status(500).json(error)
+    response.status(500).json({error})
   }
-
-  return token
 })
 
 
