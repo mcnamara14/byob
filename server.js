@@ -1,6 +1,7 @@
 const bodyParser = require('body-parser');
 const express = require('express');
 const app = express();
+const jwt = require('jsonwebtoken');
 
 const environment = process.env.NODE_ENV || 'development';
 const configuration = require('./knexfile')[environment];
@@ -9,9 +10,58 @@ const database = require('knex')(configuration);
 app.set('port', process.env.PORT || 3000);
 app.locals.title = 'BYOB';
 
+app.set('secretKey', 'vonmiller');
 app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+
+// Authentication
+const checkAuth = (request, response, next) => {
+  const token = request.body.token;
+
+  if (token) {
+    try {
+      var decoded = jwt.verify(request.body.token, app.get('secretKey'))
+    } catch(err) {
+      response.status(403).send('Invalid token')
+    } 
+  } else {
+    response.status(403).send('You must be authorized to hit this endpoint.')
+  }
+
+  next()
+}
+
+const checkAppName = (request, response, next) => {
+  const appName = request.body.appName.toLowerCase();
+  const application = app.locals.title.toLowerCase();
+
+  if (!request.body.appName) {
+    response.status(422).send('You must send an appName with the request')
+  } else if (appName !== application) {
+    response.status(403).send('Invalid application')
+  }
+  
+  next()
+}
+
+app.post('/api/v1/authentication', (request, response) => {
+  const { email, appName } = request.body;
+
+  const token = jwt.sign({
+      email,
+      appName
+  }, app.get('secretKey'), { expiresIn: '48h'})
+
+  if (token) {
+    response.status(201).send(token)
+  } else {
+    response.status(500).json(error)
+  }
+
+  return token
+})
+
 
 // Get all restaurants 
 
@@ -100,7 +150,7 @@ app.post('/api/v1/restaurants/:restaurant_id/drinks', (request, response) => {
 
 // Add a restaurant
 
-app.post('/api/v1/restaurants/', (request, response) => {
+app.post('/api/v1/restaurants/', checkAuth, checkAppName, (request, response) => {
   const {
     name,
     address,
