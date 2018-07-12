@@ -1,11 +1,35 @@
+process.env.NODE_ENV = 'test';
+
 const chai = require('chai');
 const should = chai.should();
 const chaiHttp = require('chai-http');
 const server = require('../server');
+const knex = require('../db/knex');
+const mockRestaurantData = require('./__mocks__ /restaurants')
 
 chai.use(chaiHttp);
 
 describe('Client Routes', () => {
+  beforeEach(function(done) {
+    knex.migrate.rollback()
+    .then(function() {
+      knex.migrate.latest()
+      .then(function() {
+        return knex.seed.run()
+        .then(function() {
+          done();
+        });
+      });
+    });
+  });
+
+  afterEach(function(done) {
+    knex.migrate.rollback()
+    .then(function() {
+      done();
+    });
+  });
+
   it('should return a response from restaurants', done => {
     chai.request(server)
       .get('/api/v1/restaurants')
@@ -27,6 +51,26 @@ describe('Client Routes', () => {
 });
 
 describe('API Routes', () => {
+  beforeEach(function(done) {
+    knex.migrate.rollback()
+    .then(function() {
+      knex.migrate.latest()
+      .then(function() {
+        return knex.seed.run()
+        .then(function() {
+          done();
+        });
+      });
+    });
+  });
+
+  afterEach(function(done) {
+    knex.migrate.rollback()
+    .then(function() {
+      done();
+    });
+  });
+
   describe('GET /api/v1/restaurants', () => {
     it('should return all of the restaurants', done => {
       chai.request(server)
@@ -55,10 +99,10 @@ describe('API Routes', () => {
         });
     });
   });
-  describe('GET /api/v1/restaurants/1', () => {
+  describe('GET /api/v1/restaurants/4', () => {
     it('should return the first restaurant', done => {
       chai.request(server)
-        .get('/api/v1/restaurants/1')
+        .get('/api/v1/restaurants/4')
         .end((err, response) => {
           response.should.have.status(200);
           response.should.be.json;
@@ -66,7 +110,7 @@ describe('API Routes', () => {
           response.body.length.should.equal(1);
           response.body[0].should.have.property('id');
           response.body[0].should.have.property('name');
-          response.body[0].name.should.equal('Ale House');
+          response.body[0].name.should.equal('Lodo\'s Bar & Grill');
           response.body[0].should.have.property('address');
           response.body[0].should.have.property('zip');
           response.body[0].should.have.property('city');
@@ -84,6 +128,7 @@ describe('API Routes', () => {
         });
     });
   });
+
   describe('GET /api/v1/drinks', () => {
     it('should return all of the drinks', done => {
       chai.request(server)
