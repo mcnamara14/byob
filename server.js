@@ -279,7 +279,7 @@ app.patch('/api/v1/restaurants/:id', checkAuth, checkAppName, (request, response
       }
     })
     .catch(error => {
-      response.status(500).json({error});
+      response.status(500).json({error: 'Error editing restaurant'});
     });
 });
 
