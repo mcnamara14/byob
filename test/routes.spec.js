@@ -1,11 +1,11 @@
 process.env.NODE_ENV = 'test';
 
 const chai = require('chai');
-const should = chai.should();
+// const should = chai.should();
 const chaiHttp = require('chai-http');
 const server = require('../server');
 const knex = require('../db/knex');
-const mockRestaurantData = require('./__mocks__ /restaurants');
+// const mockRestaurantData = require('./__mocks__ /restaurants');
 
 chai.use(chaiHttp);
 
@@ -367,9 +367,9 @@ describe('API Routes', () => {
       chai.request(server)
         .patch('/api/v1/restaurants/1')
         .send({
-          name: "Ale House Updated",
-          token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNhbUBnbWFpbC5jb20iLCJhcHBOYW1lIjoiQW5ncnkgQmlyZHMiLCJpYXQiOjE1MzE0MzUyMTUsImV4cCI6MTUzMTYwODAxNX0.ITmFfFCrENycfsVtDD7C0vgfhI4XwQTNiaNB4KybZqM",
-          appName: "BYOB"
+          name: 'Ale House Updated',
+          token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNhbUBnbWFpbC5jb20iLCJhcHBOYW1lIjoiQW5ncnkgQmlyZHMiLCJpYXQiOjE1MzE0MzUyMTUsImV4cCI6MTUzMTYwODAxNX0.ITmFfFCrENycfsVtDD7C0vgfhI4XwQTNiaNB4KybZqM',
+          appName: 'BYOB'
         })
         .end((err, response) => {
           response.should.have.status(201);
@@ -380,12 +380,12 @@ describe('API Routes', () => {
 
     it('should return a 403 response when the restaurant id passed in doesn\'t exist', done => {
       chai.request(server)
-      .patch('/api/v1/restaurants/90')
-      .end((err, response) => {
-        response.should.have.status(403);
-        done();
-      });
-    })
+        .patch('/api/v1/restaurants/90')
+        .end((err, response) => {
+          response.should.have.status(403);
+          done();
+        });
+    });
   });
 
   describe('PATCH /api/v1/drinks/:id', () => {
@@ -393,9 +393,9 @@ describe('API Routes', () => {
       chai.request(server)
         .patch('/api/v1/drinks/1')
         .send({
-          description: "$4 Martinis",
-          token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNhbUBnbWFpbC5jb20iLCJhcHBOYW1lIjoiQW5ncnkgQmlyZHMiLCJpYXQiOjE1MzE0MzUyMTUsImV4cCI6MTUzMTYwODAxNX0.ITmFfFCrENycfsVtDD7C0vgfhI4XwQTNiaNB4KybZqM",
-          appName: "BYOB"
+          description: '$4 Martinis',
+          token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNhbUBnbWFpbC5jb20iLCJhcHBOYW1lIjoiQW5ncnkgQmlyZHMiLCJpYXQiOjE1MzE0MzUyMTUsImV4cCI6MTUzMTYwODAxNX0.ITmFfFCrENycfsVtDD7C0vgfhI4XwQTNiaNB4KybZqM',
+          appName: 'BYOB'
         })
         .end((err, response) => {
           response.should.have.status(201);
@@ -406,11 +406,11 @@ describe('API Routes', () => {
 
     it('should return a 403 response when the restaurant id passed in doesn\'t exist', done => {
       chai.request(server)
-      .patch('/api/v1/drinks/90')
-      .end((err, response) => {
-        response.should.have.status(403);
-        done();
-      });
-    })
+        .patch('/api/v1/drinks/90')
+        .end((err, response) => {
+          response.should.have.status(403);
+          done();
+        });
+    });
   });
 });
