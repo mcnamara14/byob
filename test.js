@@ -1,4 +1,4 @@
-let restaurantData = [{
+module.exports = [{
   name: 'Ale House',
   address: '2501 16th St',
   zip: 80211,

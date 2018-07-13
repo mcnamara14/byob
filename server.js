@@ -20,10 +20,10 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 const checkAuth = (request, response, next) => {
   const token = request.body.token;
-  console.log('running')
+
   if (token) {
     try {
-      var decoded = jwt.verify(token, app.get('secretKey'));
+      // let decoded = jwt.verify(token, app.get('secretKey'));
     } catch (err) {
       response.status(403).send('Invalid token');
     }
@@ -70,19 +70,19 @@ app.get('/api/v1/restaurants', (request, response) => {
   if (zipcode) {
     database('restaurants').where('zip', zipcode).select()
       .then((restaurants) => {
-        response.status(200).send(restaurants)
+        response.status(200).send(restaurants);
       })
       .catch((error) => {
         response.status(500).json({error});
       });
   } else {
     database('restaurants').select()
-    .then((restaurants) => {
-      response.status(200).json(restaurants);
-    })
-    .catch((error) => {
-      response.status(500).json({error});
-    });
+      .then((restaurants) => {
+        response.status(200).json(restaurants);
+      })
+      .catch((error) => {
+        response.status(500).json({error});
+      });
   }
 });
 
@@ -271,7 +271,6 @@ app.patch('/api/v1/restaurants/:id', checkAuth, checkAppName, (request, response
   delete updatedRestaurant.token;
   delete updatedRestaurant.appName;
 
-
   database('restaurants').where('id', request.params.id)
     .update(updatedRestaurant)
     .then(restaurant => {
@@ -306,7 +305,7 @@ app.patch('/api/v1/drinks/:id', checkAuth, checkAppName, (request, response) => 
 });
 
 app.listen(app.get('port'), () => {
-  console.log(`${app.locals.title} is running on ${app.get('port')}.`);
+  // console.log(`${app.locals.title} is running on ${app.get('port')}.`);
 });
 
 module.exports = app;

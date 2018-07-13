@@ -96,7 +96,7 @@ module.exports = [
     saturday: '3pm - 5pm',
     sunday: null,
     drinks: [
-        {description: '$3 select beers', best_deal: false},
+      {description: '$3 select beers', best_deal: false},
       {description: '%50 bottles of wine', best_deal: true}
     ]
   },
@@ -390,7 +390,10 @@ module.exports = [
     saturday: '11am – 2am',
     sunday: '11am – 12am',
     drinks: [
-      {description: '$4 well, wine and draught (excludes Guinness and Rotating Crafts) 4pm-7pm Monday through Friday.', best_deal: true}
+      {
+        description: '$4 well, wine and draught (excludes Guinness and Rotating Crafts) 4pm-7pm Monday through Friday.',
+        best_deal: true
+      }
     ]
   }
 ];
