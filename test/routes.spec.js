@@ -271,4 +271,20 @@ describe('API Routes', () => {
         });
     });
   });
+
+  describe('DELETE /api/v1/drinks/:id/', () => {
+    it('should delete a restaurant', done => {
+      chai.request(server)
+        .delete('/api/v1/drinks/1/')
+        .send({
+          token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNhbUBnbWFpbC5jb20iLCJhcHBOYW1lIjoiQW5ncnkgQmlyZHMiLCJpYXQiOjE1MzE0MzUyMTUsImV4cCI6MTUzMTYwODAxNX0.ITmFfFCrENycfsVtDD7C0vgfhI4XwQTNiaNB4KybZqM",
+          appName: "BYOB"
+        })
+        .end((err, response) => {
+          response.should.have.status(204);
+          response.body.should.be.a('object');
+          done();
+        });
+    });
+  });
 });
