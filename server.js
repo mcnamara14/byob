@@ -31,7 +31,7 @@ const checkAuth = (request, response, next) => {
 
   if (token) {
     try {
-      // let decoded = jwt.verify(token, app.get('secretKey'));
+      let decoded = jwt.verify(token, app.get('secretKey'));
     } catch (err) {
       response.status(403).send("Invalid token");
     }
