@@ -294,6 +294,21 @@ describe('API Routes', () => {
           done();
         });
     });
+
+    it('should return a 422 when all parameters aren\'t passed into body', done => {
+      chai.request(server)
+        .post('/api/v1/restaurants/')
+        .send({
+          name: 'Ale House',
+          token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNhbUBnbWFpbC5jb20iLCJhcHBOYW1lIjoiQW5ncnkgQmlyZHMiLCJpYXQiOjE1MzE0MzUyMTUsImV4cCI6MTUzMTYwODAxNX0.ITmFfFCrENycfsVtDD7C0vgfhI4XwQTNiaNB4KybZqM',
+          appName: 'BYOB'
+        })
+        .end((err, response) => {
+          response.should.have.status(422);
+          done();
+        });
+    });
+
   });
 
   describe('DELETE /api/v1/restaurants/:id', () => {
@@ -310,6 +325,16 @@ describe('API Routes', () => {
           done();
         });
     });
+
+    it('should return a 403 when the passed in restaurant id doesn\'t exist', done => {
+      chai.request(server)
+        .delete('/api/v1/restaurants/90')
+        .end((err, response) => {
+          response.should.have.status(403);
+          done();
+        });
+    });
+
   });
 
   describe('DELETE /api/v1/drinks/:id/', () => {
@@ -323,6 +348,15 @@ describe('API Routes', () => {
         .end((err, response) => {
           response.should.have.status(204);
           response.body.should.be.a('object');
+          done();
+        });
+    });
+
+    it('should return a 403 when the passed in restaurant id doesn\'t exist', done => {
+      chai.request(server)
+        .delete('/api/v1/drinks/90')
+        .end((err, response) => {
+          response.should.have.status(403);
           done();
         });
     });

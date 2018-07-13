@@ -238,7 +238,7 @@ app.delete('/api/v1/restaurants/:id', checkAuth, checkAppName, (request, respons
           if (restaurant) {
             response.status(204).json({status: 'Restaurant deleted'});
           } else {
-            response.status(404).json({error: `Could not locate a restaurant with id ${request.params.id}`});
+            response.status(403).json({error: `Could not locate a restaurant with id ${request.params.id}`});
           }
         })
         .catch(error => {
@@ -256,7 +256,7 @@ app.delete('/api/v1/drinks/:id/', checkAuth, checkAppName, (request, response) =
       if (drink) {
         response.status(204).json({status: 'Drink deleted'});
       } else {
-        response.status(404).json({error: 'Error drink not found!'});
+        response.status(403).json({error: 'Error drink not found!'});
       }
     })
     .catch(error => {
