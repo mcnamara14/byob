@@ -278,7 +278,7 @@ app.patch('/api/v1/restaurants/:id', checkAuth, checkAppName, (request, response
       if (restaurant) {
         response.status(201).json({status: `Restaurant ${request.params.id} was updated`});
       } else {
-        response.status(422).json({error: 'Restaurant found!'});
+        response.status(403).json({error: 'Restaurant found!'});
       }
     })
     .catch(error => {
@@ -288,8 +288,8 @@ app.patch('/api/v1/restaurants/:id', checkAuth, checkAppName, (request, response
 
 app.patch('/api/v1/drinks/:id', checkAuth, checkAppName, (request, response) => {
   const updatedDrink = request.body;
-  delete updatedRestaurant.token;
-  delete updatedRestaurant.appName;
+  delete updatedDrink.token;
+  delete updatedDrink.appName;
 
   database('drinks').where('id', request.params.id)
     .update(updatedDrink)
@@ -297,8 +297,11 @@ app.patch('/api/v1/drinks/:id', checkAuth, checkAppName, (request, response) => 
       if (drink) {
         response.status(201).json({status: `Drink ${request.params.id} was updated`});
       } else {
-        response.status(422).json({error: 'Drink found!'});
+        response.status(403).json({error: 'Drink found!'});
       }
+    })
+    .catch(error => {
+      response.status(500).json({error: 'Error editing drink'});
     });
 });
 

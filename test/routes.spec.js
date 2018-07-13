@@ -377,5 +377,40 @@ describe('API Routes', () => {
           done();
         });
     });
+
+    it('should return a 403 response when the restaurant id passed in doesn\'t exist', done => {
+      chai.request(server)
+      .patch('/api/v1/restaurants/90')
+      .end((err, response) => {
+        response.should.have.status(403);
+        done();
+      });
+    })
+  });
+
+  describe('PATCH /api/v1/drinks/:id', () => {
+    it('should patch/update a drink', done => {
+      chai.request(server)
+        .patch('/api/v1/drinks/1')
+        .send({
+          description: "$4 Martinis",
+          token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNhbUBnbWFpbC5jb20iLCJhcHBOYW1lIjoiQW5ncnkgQmlyZHMiLCJpYXQiOjE1MzE0MzUyMTUsImV4cCI6MTUzMTYwODAxNX0.ITmFfFCrENycfsVtDD7C0vgfhI4XwQTNiaNB4KybZqM",
+          appName: "BYOB"
+        })
+        .end((err, response) => {
+          response.should.have.status(201);
+          response.body.should.be.a('object');
+          done();
+        });
+    });
+
+    it('should return a 403 response when the restaurant id passed in doesn\'t exist', done => {
+      chai.request(server)
+      .patch('/api/v1/drinks/90')
+      .end((err, response) => {
+        response.should.have.status(403);
+        done();
+      });
+    })
   });
 });
