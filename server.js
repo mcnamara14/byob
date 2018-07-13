@@ -20,7 +20,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 const checkAuth = (request, response, next) => {
   const token = request.body.token;
-
+  console.log('running')
   if (token) {
     try {
       var decoded = jwt.verify(token, app.get('secretKey'));
@@ -65,13 +65,25 @@ app.post('/api/v1/authentication', (request, response) => {
 // Get all restaurants
 
 app.get('/api/v1/restaurants', (request, response) => {
-  database('restaurants').select()
+  const zipcode = request.query.zipcode;
+
+  if (zipcode) {
+    database('restaurants').where('zip', zipcode).select()
+      .then((restaurants) => {
+        response.status(200).send(restaurants)
+      })
+      .catch((error) => {
+        response.status(500).json({error});
+      });
+  } else {
+    database('restaurants').select()
     .then((restaurants) => {
       response.status(200).json(restaurants);
     })
     .catch((error) => {
       response.status(500).json({error});
     });
+  }
 });
 
 // Get all drinks
