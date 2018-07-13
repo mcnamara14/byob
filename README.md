@@ -1,4 +1,9 @@
+[![Build Status](https://travis-ci.org/mcnamara14/byob.svg?branch=master)](https://travis-ci.org/mcnamara14/byob)
+
 # Build Your Own Backend
+
+![image](https://user-images.githubusercontent.com/8752377/42704914-df17a406-868e-11e8-9938-8a9445cddd3e.png)
+
 ## About the API
 
 Build Your Own Backend is an API that provides happy hour data for downtown Denver restaurants. Authorized users are able to POST, PATCH, and DELETE data using the custom endpoints.
