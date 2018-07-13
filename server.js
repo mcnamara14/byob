@@ -280,7 +280,6 @@ app.patch("/api/v1/restaurants/:id", checkAuth, checkAppName, (request, response
   delete updatedRestaurant.appName;
   delete updatedRestaurant.email;
 
-  console.log(updatedRestaurant)
   database("restaurants").where("id", request.params.id)
     .update(updatedRestaurant)
     .then(restaurant => {

@@ -50,5 +50,7 @@ exports.seed = (knex, Promise) => {
 
       return Promise.all(restaurantPromises);
     })
-    .catch(error => console.log(`Error seeding data: ${error}`));
+    .catch(error => {
+      return(`Error seeding data: ${error}`);
+    });
 };
