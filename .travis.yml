@@ -1,9 +1,15 @@
 language: node_js
 node_js:
-  - "node"
+- node
 services:
-  - postgresql
+- postgresql
 before_script:
-  - psql -c 'CREATE DATABASE byob_test;' -U postgres
+- psql -c 'CREATE DATABASE travis_test;' -U postgres
 notifications:
   email: false
+deploy:
+  provider: heroku
+  api_key:
+    secure: gsNf1VwSLrxkbQc+WA4kwlqd15RVlq5h7rN+4U+gcT/i3WJL196jYP7+dhGVjDNcRGKglxnLWOK82XTsIlR11TH0guy3+RDVrJvHGnEhrMWIqEPExl4mxLPNylFWPNY3Ce876zqzeT8Q6lBqzUSpXOAfgJekE7E3ZqH2YLmNyHyH+Yi6WgnQSmBeVe5Zii1pXxnpkCIGgFtBI/V6RjIR+8Ub3IIl5PiozTPjGOGUTPTidHzb6sA4aVaQxszbXNWxw8wM7lVbrxYLXWiRfuyeTBg9gWwFLNL2+lD5KfiOvZ37fDIJmcHsJwBFkKcKEibaxDDzUUY3D0+yy6q4vbvF14NXX7cRVV8nF5nPV8bP7otaMoodQYLqpIBogFVWeFfGskh0w+DZdEDyidMksWiiAXGlOjICknYaTTRvWyhtgoeRKbnHvShNXvbFGu7jhEwh6hfJHIno0qxmpcL65SlJH2E6nQXEgrl7AYxLS+far0W7UalD3WT2e22Bb5BNbfdeaeOPVc3o1/Wm/YNyneH3SrXUkDo8LhsgtWa/U+85wH0ZiJ28HFq5PrYxIy6i0h3yNbssjt5qzaiDzLD8Is5lGpbf+FG7vGFEeyncu7RlzG08jIU0KCAT5zkFpIWor+CzN3FjAzGylT/b/Stic7aB0jWnhfUuucbMw6HJLrinteA=
+  app: byob-tm-cs
+  skip_cleanup: true
