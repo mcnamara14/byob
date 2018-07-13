@@ -142,6 +142,8 @@ Sample response:
 
 ### Post
 
+If you retrieved a JWT with a @turing.io email address you are able to make delete requests by including your JSON Web Token and appName('BYOB') in the body of all post requests along with other required properties.
+
 #### Add a restaurant
 
 ``` POST /api/v1/restaurants ```
@@ -161,9 +163,7 @@ wednesday [string],
 thursday [string],
 friday [string],
 saturday [string],
-sunday [string],
-token(JSON Web Token as mentioned above),
-appName('BYOB')
+sunday [string]
 ```
 
 Sample response:
@@ -171,27 +171,48 @@ Sample response:
 ``` Status: 201 OK ```
 
 ``` javascript 
-  [
-    {
-      "id": 15,
-      "name": "Euclid Hall Bar and Kitchen",
-      "address": "1317 14th St",
-      "zip": 80202,
-      "city": "Denver",
-      "state": "CO",
-      "phone": "(303) 595-4255",
-      "website": "http://www.euclidhall.com",
-      "monday": "4pm - 7pm",
-      "tuesday": "4pm - 7pm",
-      "wednesday": "4pm - 7pm",
-      "thursday": "4pm - 7pm",
-      "friday": "4pm - 7pm",
-      "saturday": null,
-      "sunday": null,
-      "created_at": "2018-07-11T22:22:53.552Z",
-      "updated_at": "2018-07-11T22:22:53.552Z"
-    },
-    ...
-  ]
-  ```
+  {
+     "id": 15
+   }
+```
+
+#### Add a drink special to a specific restaurant
+
+``` POST /api/v1/restaurants/:restaurant_id/drinks ```
+
+Body of request must contain in JSON format the following properties:
+``` 
+description [string],
+best_deal [boolean]
+```
+
+Sample response:
+
+``` Status: 201 OK ```
+
+``` javascript 
+  {
+     "id": 8
+   }
+```
+
+### Delete
+
+If you retrieved a JWT with a @turing.io email address you are able to make delete requests by including your JSON Web Token and appName('BYOB') in the body of all delete requests along with other required properties.
+
+#### Delete a restaurant
+
+``` DELETE /api/v1/restaurants/:id ```
+
+The restaurant id must be passed as a param to the endpoint. 
+
+Sample response:
+
+``` Status: 204 OK ```
+
+``` javascript 
+  {
+     "status": "Restaurant deleted"
+   }
+```
   
