@@ -254,7 +254,7 @@ app.delete('/api/v1/drinks/:id/', checkAuth, checkAppName, (request, response) =
 
 // Modify a restaurant
 
-app.patch('/api/v1/restaurants/:id', (request, response) => {
+app.patch('/api/v1/restaurants/:id', checkAuth, checkAppName, (request, response) => {
   const newRestaurant = request.body;
 
   database('restaurants').where('id', request.params.id)
@@ -271,7 +271,7 @@ app.patch('/api/v1/restaurants/:id', (request, response) => {
     });
 });
 
-app.patch('/api/v1/drinks/:id', (request, response) => {
+app.patch('/api/v1/drinks/:id', checkAuth, checkAppName, (request, response) => {
   const newDrink = request.body;
 
   database('drinks').where('id', request.params.id)
