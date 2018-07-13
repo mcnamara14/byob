@@ -218,23 +218,26 @@ app.post('/api/v1/restaurants/', checkAuth, checkAppName, (request, response) =>
 
 // Delete a restaurant
 
-app.delete('/api/v1/restaurants/:id', (request, response) => {
-  database('restaurants').where('id', request.params.id).del()
-    .then(restaurant => {
-      if (restaurant) {
-        response.status(204).json({status: 'Restaurant deleted'});
-      } else {
-        response.status(404).json({error: `Could not locate a restaurant with id ${request.params.id}`});
-      }
-    })
-    .catch(error => {
-      response.status(500).json({error});
+app.delete('/api/v1/restaurants/:id', checkAuth, checkAppName, (request, response) => {
+  database('drinks').where('restaurant_id', request.params.id).del()
+    .then(() => {
+      database('restaurants').where('id', request.params.id).del()
+        .then(restaurant => {
+          if (restaurant) {
+            response.status(204).json({status: 'Restaurant deleted'});
+          } else {
+            response.status(404).json({error: `Could not locate a restaurant with id ${request.params.id}`});
+          }
+        })
+        .catch(error => {
+          response.status(500).json({error});
+        });
     });
 });
 
 // Delete a drink special from a restaurant
 
-app.delete('/api/v1/drinks/:id/', (request, response) => {
+app.delete('/api/v1/drinks/:id/', checkAuth, checkAppName, (request, response) => {
   database('drinks').where('id', request.params.id)
     .del()
     .then(drink => {
