@@ -215,4 +215,61 @@ Sample response:
      "status": "Restaurant deleted"
    }
 ```
-  
+
+#### Delete a drink special
+
+``` DELETE /api/v1/drinks/:id ```
+
+The drink id must be passed as a param to the endpoint. 
+
+Sample response:
+
+``` Status: 204 OK ```
+
+``` javascript 
+  {
+     "status": "Drink deleted"
+   }
+```
+
+
+### Patch
+
+If you retrieved a JWT with a @turing.io email address you are able to make patch requests by including your JSON Web Token and appName('BYOB') in the body of all patch requests along with other required properties.
+
+#### Edit a restaurant
+
+``` PATCH /api/v1/restaurants/:id ```
+
+The restaurant id must be passed as a param to the endpoint. 
+
+Sample response:
+
+``` Status: 204 OK ```
+
+``` javascript 
+  {
+     "status": "Restaurant 3 was updated"
+   }
+```
+
+
+#### Edit a drink
+
+``` PATCH /api/v1/drinks/:id ```
+
+The drink id must be passed as a param to the endpoint. 
+
+Sample response:
+
+``` Status: 204 OK ```
+
+``` javascript 
+  {
+     "status": "Drink 9 was updated"
+   }
+```
+
+## Contributors
+
+[Tyler McNamara](https://github.com/mcnamara14) & [Camilo Snapp](https://github.com/CamArturo)
