@@ -155,7 +155,7 @@ app.post('/api/v1/restaurants/:restaurant_id/drinks', checkAuth, checkAppName, (
       response.status(201).json({id: drink[0]});
     })
     .catch(error => {
-      response.status(500).json({error: `No restaurants with an id of ${restaurant_id}.`});
+      response.status(404).json({error: `No restaurants with an id of ${restaurant_id}.`});
     });
 });
 
@@ -238,7 +238,7 @@ app.delete('/api/v1/restaurants/:id', checkAuth, checkAppName, (request, respons
           if (restaurant) {
             response.status(204).json({status: 'Restaurant deleted'});
           } else {
-            response.status(404).json({error: `Could not locate a restaurant with id ${request.params.id}`});
+            response.status(403).json({error: `Could not locate a restaurant with id ${request.params.id}`});
           }
         })
         .catch(error => {
@@ -256,7 +256,7 @@ app.delete('/api/v1/drinks/:id/', checkAuth, checkAppName, (request, response) =
       if (drink) {
         response.status(204).json({status: 'Drink deleted'});
       } else {
-        response.status(404).json({error: 'Error drink not found!'});
+        response.status(403).json({error: 'Error drink not found!'});
       }
     })
     .catch(error => {
@@ -267,15 +267,18 @@ app.delete('/api/v1/drinks/:id/', checkAuth, checkAppName, (request, response) =
 // Modify a restaurant
 
 app.patch('/api/v1/restaurants/:id', checkAuth, checkAppName, (request, response) => {
-  const newRestaurant = request.body;
+  let updatedRestaurant = request.body;
+  delete updatedRestaurant.token;
+  delete updatedRestaurant.appName;
+
 
   database('restaurants').where('id', request.params.id)
-    .update(newRestaurant)
+    .update(updatedRestaurant)
     .then(restaurant => {
       if (restaurant) {
         response.status(201).json({status: `Restaurant ${request.params.id} was updated`});
       } else {
-        response.status(422).json({error: 'Restaurant found!'});
+        response.status(403).json({error: 'Restaurant found!'});
       }
     })
     .catch(error => {
@@ -284,16 +287,21 @@ app.patch('/api/v1/restaurants/:id', checkAuth, checkAppName, (request, response
 });
 
 app.patch('/api/v1/drinks/:id', checkAuth, checkAppName, (request, response) => {
-  const newDrink = request.body;
+  const updatedDrink = request.body;
+  delete updatedDrink.token;
+  delete updatedDrink.appName;
 
   database('drinks').where('id', request.params.id)
-    .update(newDrink)
+    .update(updatedDrink)
     .then(drink => {
       if (drink) {
         response.status(201).json({status: `Drink ${request.params.id} was updated`});
       } else {
-        response.status(422).json({error: 'Drink found!'});
+        response.status(403).json({error: 'Drink found!'});
       }
+    })
+    .catch(error => {
+      response.status(500).json({error: 'Error editing drink'});
     });
 });
 

@@ -30,15 +30,6 @@ describe('Client Routes', () => {
       });
   });
 
-  it('should return a response from restaurants', done => {
-    chai.request(server)
-      .get('/api/v1/restaurants')
-      .end((err, response) => {
-        response.should.have.status(200);
-        done();
-      });
-  });
-
   it('should return a 404 for a route that does not exist', done => {
     chai.request(server)
       .get('/sad')
@@ -113,6 +104,7 @@ describe('API Routes', () => {
         });
     });
   });
+
   describe('GET /api/v1/restaurants/4', () => {
     it('should return a single restaurant matching the id passed as a param', done => {
       chai.request(server)
@@ -155,6 +147,15 @@ describe('API Routes', () => {
           done();
         });
     });
+
+    it('should return a 404 where the restaurant id isn\'t found', done => {
+      chai.request(server)
+        .get('/api/v1/restaurants/90')
+        .end((err, response) => {
+          response.should.have.status(404);
+          done();
+        });
+    });
   });
 
   describe('GET /api/v1/drinks', () => {
@@ -176,7 +177,7 @@ describe('API Routes', () => {
     });
   });
 
-  describe('GET /api/v1/restaurants/:id', () => {
+  describe('GET /api/v1/restaurants/:restaurant_id/drinks', () => {
     it('should return all drink specials for a single restaurant matching the id passed as a param', done => {
       chai.request(server)
         .get('/api/v1/restaurants/5/drinks')
@@ -202,6 +203,16 @@ describe('API Routes', () => {
           done();
         });
     });
+
+    it('should return a 404 where the restaurant id isn\'t found', done => {
+      chai.request(server)
+        .get('/api/v1/restaurants/90/drinks')
+        .end((err, response) => {
+          response.should.have.status(404);
+          done();
+        });
+    });
+
   });
 
   describe('POST /api/v1/restaurants/:restaurant_id/drinks', () => {
@@ -219,6 +230,35 @@ describe('API Routes', () => {
           response.body.should.be.a('object');
           response.body.should.have.property('id');
           response.body.id.should.equal(35);
+          done();
+        });
+    });
+
+    it('should return a 422 when all parameters aren\'t passed into body', done => {
+      chai.request(server)
+        .post('/api/v1/restaurants/1/drinks')
+        .send({
+          description: '$2 Vegas Bombs!',
+          token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNhbUBnbWFpbC5jb20iLCJhcHBOYW1lIjoiQW5ncnkgQmlyZHMiLCJpYXQiOjE1MzE0MzUyMTUsImV4cCI6MTUzMTYwODAxNX0.ITmFfFCrENycfsVtDD7C0vgfhI4XwQTNiaNB4KybZqM',
+          appName: 'BYOB'
+        })
+        .end((err, response) => {
+          response.should.have.status(422);
+          done();
+        });
+    });
+
+    it('should return a 404 when the passed in restaurant id doesn\'t exist', done => {
+      chai.request(server)
+        .post('/api/v1/restaurants/90/drinks')
+        .send({
+          description: '$2 Vegas Bombs!',
+          best_deal: true,
+          token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNhbUBnbWFpbC5jb20iLCJhcHBOYW1lIjoiQW5ncnkgQmlyZHMiLCJpYXQiOjE1MzE0MzUyMTUsImV4cCI6MTUzMTYwODAxNX0.ITmFfFCrENycfsVtDD7C0vgfhI4XwQTNiaNB4KybZqM',
+          appName: 'BYOB'
+        })
+        .end((err, response) => {
+          response.should.have.status(404);
           done();
         });
     });
@@ -254,6 +294,21 @@ describe('API Routes', () => {
           done();
         });
     });
+
+    it('should return a 422 when all parameters aren\'t passed into body', done => {
+      chai.request(server)
+        .post('/api/v1/restaurants/')
+        .send({
+          name: 'Ale House',
+          token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNhbUBnbWFpbC5jb20iLCJhcHBOYW1lIjoiQW5ncnkgQmlyZHMiLCJpYXQiOjE1MzE0MzUyMTUsImV4cCI6MTUzMTYwODAxNX0.ITmFfFCrENycfsVtDD7C0vgfhI4XwQTNiaNB4KybZqM',
+          appName: 'BYOB'
+        })
+        .end((err, response) => {
+          response.should.have.status(422);
+          done();
+        });
+    });
+
   });
 
   describe('DELETE /api/v1/restaurants/:id', () => {
@@ -270,6 +325,16 @@ describe('API Routes', () => {
           done();
         });
     });
+
+    it('should return a 403 when the passed in restaurant id doesn\'t exist', done => {
+      chai.request(server)
+        .delete('/api/v1/restaurants/90')
+        .end((err, response) => {
+          response.should.have.status(403);
+          done();
+        });
+    });
+
   });
 
   describe('DELETE /api/v1/drinks/:id/', () => {
@@ -286,12 +351,21 @@ describe('API Routes', () => {
           done();
         });
     });
+
+    it('should return a 403 when the passed in restaurant id doesn\'t exist', done => {
+      chai.request(server)
+        .delete('/api/v1/drinks/90')
+        .end((err, response) => {
+          response.should.have.status(403);
+          done();
+        });
+    });
   });
 
   describe('PATCH /api/v1/restaurants/:id', () => {
     it('should patch/update a restaurant', done => {
       chai.request(server)
-        .put('/api/v1/restaurants/1')
+        .patch('/api/v1/restaurants/1')
         .send({
           name: "Ale House Updated",
           token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNhbUBnbWFpbC5jb20iLCJhcHBOYW1lIjoiQW5ncnkgQmlyZHMiLCJpYXQiOjE1MzE0MzUyMTUsImV4cCI6MTUzMTYwODAxNX0.ITmFfFCrENycfsVtDD7C0vgfhI4XwQTNiaNB4KybZqM",
@@ -303,5 +377,40 @@ describe('API Routes', () => {
           done();
         });
     });
+
+    it('should return a 403 response when the restaurant id passed in doesn\'t exist', done => {
+      chai.request(server)
+      .patch('/api/v1/restaurants/90')
+      .end((err, response) => {
+        response.should.have.status(403);
+        done();
+      });
+    })
+  });
+
+  describe('PATCH /api/v1/drinks/:id', () => {
+    it('should patch/update a drink', done => {
+      chai.request(server)
+        .patch('/api/v1/drinks/1')
+        .send({
+          description: "$4 Martinis",
+          token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNhbUBnbWFpbC5jb20iLCJhcHBOYW1lIjoiQW5ncnkgQmlyZHMiLCJpYXQiOjE1MzE0MzUyMTUsImV4cCI6MTUzMTYwODAxNX0.ITmFfFCrENycfsVtDD7C0vgfhI4XwQTNiaNB4KybZqM",
+          appName: "BYOB"
+        })
+        .end((err, response) => {
+          response.should.have.status(201);
+          response.body.should.be.a('object');
+          done();
+        });
+    });
+
+    it('should return a 403 response when the restaurant id passed in doesn\'t exist', done => {
+      chai.request(server)
+      .patch('/api/v1/drinks/90')
+      .end((err, response) => {
+        response.should.have.status(403);
+        done();
+      });
+    })
   });
 });
