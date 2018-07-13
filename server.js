@@ -25,7 +25,7 @@ const checkAuth = (request, response, next) => {
   if (email) {
     const lastCharacters = email.substring(email.length - 10, email.length);
     if (lastCharacters !== "@turing.io") {
-      response.status(403).send("You must be authorized to hit this endpoint.");
+      response.status(403).send("You must have an email registered with turing.io.");
     }
   }
 
@@ -278,7 +278,9 @@ app.patch("/api/v1/restaurants/:id", checkAuth, checkAppName, (request, response
   let updatedRestaurant = request.body;
   delete updatedRestaurant.token;
   delete updatedRestaurant.appName;
+  delete updatedRestaurant.email;
 
+  console.log(updatedRestaurant)
   database("restaurants").where("id", request.params.id)
     .update(updatedRestaurant)
     .then(restaurant => {
