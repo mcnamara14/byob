@@ -30,15 +30,6 @@ describe('Client Routes', () => {
       });
   });
 
-  it('should return a response from restaurants', done => {
-    chai.request(server)
-      .get('/api/v1/restaurants')
-      .end((err, response) => {
-        response.should.have.status(200);
-        done();
-      });
-  });
-
   it('should return a 404 for a route that does not exist', done => {
     chai.request(server)
       .get('/sad')
@@ -113,6 +104,7 @@ describe('API Routes', () => {
         });
     });
   });
+
   describe('GET /api/v1/restaurants/4', () => {
     it('should return a single restaurant matching the id passed as a param', done => {
       chai.request(server)
@@ -152,6 +144,15 @@ describe('API Routes', () => {
           response.body[0].saturday.should.equal('3pm - 6pm');
           response.body[0].should.have.property('sunday');
           (response.body[0].sunday === null).should.be.true;
+          done();
+        });
+    });
+
+    it('should return a 404 where the restaurant id isn\'t found', done => {
+      chai.request(server)
+        .get('/api/v1/restaurants/90')
+        .end((err, response) => {
+          response.should.have.status(404);
           done();
         });
     });
@@ -291,7 +292,7 @@ describe('API Routes', () => {
   describe('PATCH /api/v1/restaurants/:id', () => {
     it('should patch/update a restaurant', done => {
       chai.request(server)
-        .put('/api/v1/restaurants/1')
+        .patch('/api/v1/restaurants/1')
         .send({
           name: "Ale House Updated",
           token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNhbUBnbWFpbC5jb20iLCJhcHBOYW1lIjoiQW5ncnkgQmlyZHMiLCJpYXQiOjE1MzE0MzUyMTUsImV4cCI6MTUzMTYwODAxNX0.ITmFfFCrENycfsVtDD7C0vgfhI4XwQTNiaNB4KybZqM",
