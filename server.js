@@ -267,10 +267,13 @@ app.delete('/api/v1/drinks/:id/', checkAuth, checkAppName, (request, response) =
 // Modify a restaurant
 
 app.patch('/api/v1/restaurants/:id', checkAuth, checkAppName, (request, response) => {
-  const newRestaurant = request.body;
+  let updatedRestaurant = request.body;
+  delete updatedRestaurant.token;
+  delete updatedRestaurant.appName;
+
 
   database('restaurants').where('id', request.params.id)
-    .update(newRestaurant)
+    .update(updatedRestaurant)
     .then(restaurant => {
       if (restaurant) {
         response.status(201).json({status: `Restaurant ${request.params.id} was updated`});
@@ -284,10 +287,12 @@ app.patch('/api/v1/restaurants/:id', checkAuth, checkAppName, (request, response
 });
 
 app.patch('/api/v1/drinks/:id', checkAuth, checkAppName, (request, response) => {
-  const newDrink = request.body;
+  const updatedDrink = request.body;
+  delete updatedRestaurant.token;
+  delete updatedRestaurant.appName;
 
   database('drinks').where('id', request.params.id)
-    .update(newDrink)
+    .update(updatedDrink)
     .then(drink => {
       if (drink) {
         response.status(201).json({status: `Drink ${request.params.id} was updated`});
