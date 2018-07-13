@@ -177,7 +177,7 @@ describe('API Routes', () => {
     });
   });
 
-  describe('GET /api/v1/restaurants/:id', () => {
+  describe('GET /api/v1/restaurants/:restaurant_id/drinks', () => {
     it('should return all drink specials for a single restaurant matching the id passed as a param', done => {
       chai.request(server)
         .get('/api/v1/restaurants/5/drinks')
@@ -203,6 +203,16 @@ describe('API Routes', () => {
           done();
         });
     });
+
+    it('should return a 404 where the restaurant id isn\'t found', done => {
+      chai.request(server)
+        .get('/api/v1/restaurants/90/drinks')
+        .end((err, response) => {
+          response.should.have.status(404);
+          done();
+        });
+    });
+
   });
 
   describe('POST /api/v1/restaurants/:restaurant_id/drinks', () => {
@@ -220,6 +230,35 @@ describe('API Routes', () => {
           response.body.should.be.a('object');
           response.body.should.have.property('id');
           response.body.id.should.equal(35);
+          done();
+        });
+    });
+
+    it('should return a 422 when all parameters aren\'t passed into body', done => {
+      chai.request(server)
+        .post('/api/v1/restaurants/1/drinks')
+        .send({
+          description: '$2 Vegas Bombs!',
+          token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNhbUBnbWFpbC5jb20iLCJhcHBOYW1lIjoiQW5ncnkgQmlyZHMiLCJpYXQiOjE1MzE0MzUyMTUsImV4cCI6MTUzMTYwODAxNX0.ITmFfFCrENycfsVtDD7C0vgfhI4XwQTNiaNB4KybZqM',
+          appName: 'BYOB'
+        })
+        .end((err, response) => {
+          response.should.have.status(422);
+          done();
+        });
+    });
+
+    it('should return a 404 when the passed in restaurant id doesn\'t exist', done => {
+      chai.request(server)
+        .post('/api/v1/restaurants/90/drinks')
+        .send({
+          description: '$2 Vegas Bombs!',
+          best_deal: true,
+          token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNhbUBnbWFpbC5jb20iLCJhcHBOYW1lIjoiQW5ncnkgQmlyZHMiLCJpYXQiOjE1MzE0MzUyMTUsImV4cCI6MTUzMTYwODAxNX0.ITmFfFCrENycfsVtDD7C0vgfhI4XwQTNiaNB4KybZqM',
+          appName: 'BYOB'
+        })
+        .end((err, response) => {
+          response.should.have.status(404);
           done();
         });
     });

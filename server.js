@@ -155,7 +155,7 @@ app.post('/api/v1/restaurants/:restaurant_id/drinks', checkAuth, checkAppName, (
       response.status(201).json({id: drink[0]});
     })
     .catch(error => {
-      response.status(500).json({error: `No restaurants with an id of ${restaurant_id}.`});
+      response.status(404).json({error: `No restaurants with an id of ${restaurant_id}.`});
     });
 });
 
